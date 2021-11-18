@@ -65,7 +65,7 @@ public class HorizontalLayoutManager extends LinearLayoutManager {
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
         if (onSetTitle != null) {
-            onSetTitle.setTitle(findFirstCompletelyVisibleItemPosition());
+            onSetTitle.setScrollItemTitle(findFirstCompletelyVisibleItemPosition());
         }
     }
 

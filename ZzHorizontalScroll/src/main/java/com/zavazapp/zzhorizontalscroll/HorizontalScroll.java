@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,7 @@ public class HorizontalScroll implements OnSetTitle{
     private RecyclerView recyclerView;
     private SnapHelper s;
     private List<ScrollItemModel> data;
-    private HorizontalLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private ConstraintLayout itemView;
     private RecyclerView.SmoothScroller smoothScroller;
 
@@ -36,11 +37,11 @@ public class HorizontalScroll implements OnSetTitle{
         this.recyclerView = recyclerView;
     }
 
-    public HorizontalLayoutManager getLayoutManager() {
+    public LinearLayoutManager getLayoutManager() {
         return layoutManager;
     }
 
-    public void setLayoutManager(HorizontalLayoutManager layoutManager) {
+    public void setLayoutManager(LinearLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
     }
 
@@ -49,7 +50,7 @@ public class HorizontalScroll implements OnSetTitle{
     }
 
     @Override
-    public void setTitle(int state) {
+    public void setScrollItemTitle(int state) {
         TextView tw = itemView.findViewById(R.id.scrollBadge);
         if (tw != null && s != null && layoutManager != null) {
             View v = s.findSnapView(layoutManager);
@@ -66,10 +67,11 @@ public class HorizontalScroll implements OnSetTitle{
         private RecyclerView recyclerView;
         private SnapHelper s;
         private List<ScrollItemModel> data;
-        private HorizontalLayoutManager layoutManager;
+        private LinearLayoutManager layoutManager;
         private float badgeTextSize;
         private int badgeTextColor;
         private int imageSize;
+        private int maxImageSize;
         private OnScrollItemClickListener clickListener;
         private OnSetTitle onSetTitle;
         private float shrinkAmount;
@@ -77,6 +79,8 @@ public class HorizontalScroll implements OnSetTitle{
         private int offset;
         private int itemsPerScreen;
         private int scrollItemLayout;
+        private ImageTransform transformType;
+        private int angleRadius;
 
         /**
          * Context, data and recyclerView required
@@ -129,6 +133,8 @@ public class HorizontalScroll implements OnSetTitle{
         /**
          * @param clickListener (Optional)
          * @return Builder with clickListener
+         * Calling activity must implement OnScrollItemClickListener
+         * and override void onItemClick(int position);
          */
         public Builder setClickListener(OnScrollItemClickListener clickListener) {
             this.clickListener = clickListener;
@@ -137,9 +143,10 @@ public class HorizontalScroll implements OnSetTitle{
 
         /**
          * @param layoutManager (Optional)
+         * HorizontalLayoutManager extends LinearLayoutManager
          * @return Builder with custom HorizontalLayoutManager
          */
-        public Builder setLayoutManager(HorizontalLayoutManager layoutManager) {
+        public Builder setLayoutManager(LinearLayoutManager layoutManager) {
             this.layoutManager = layoutManager;
             return this;
         }
@@ -172,11 +179,42 @@ public class HorizontalScroll implements OnSetTitle{
         }
 
         /**
-         * @param imageSize (optional) - Sets the image text size of square shape. Sets the image radius.
+         * @param imageSize (optional) - pixels - Sets the image size of square shape. Sets the image radius.
+         * Size is auto generated to max: screen width / items per screen
          * @return Builder with custom badge text size.
          */
         public Builder setImageSize(int imageSize) {
             this.imageSize = imageSize;
+            return this;
+        }
+
+        /**
+         * @param maxImageSize (optional) - pixels - Sets the image maximum size of square shape. Sets the image max radius.
+         * Size is auto generated to max: screen width / items per screen
+         * Useful if you want less items per screen with reduced size
+         * @return Builder with custom badge text size.
+         */
+        public Builder setMaxImageSize(int maxImageSize) {
+            this.maxImageSize = maxImageSize;
+            return this;
+        }
+
+        /**
+         * @param transformValue (optional)
+         * @return Builder with custom image transform.
+         */
+        public Builder setTransform(ImageTransform transformValue) {
+            this.transformType = transformValue;
+            return this;
+        }
+
+        /**
+         * @param angleRadius (optional)
+         * @return Builder with image with corner radius of chosen
+         * value if ImageTransform.SQUARE_CIRCULAR type is used
+         */
+        public Builder setAngleRadius(int angleRadius) {
+            this.angleRadius = angleRadius;
             return this;
         }
 
@@ -186,8 +224,9 @@ public class HorizontalScroll implements OnSetTitle{
         }
 
         /**
-         * @param onSetTitle (optional) - OnSetTitle interface for title set callback
+         * @param onSetTitle (optional) - OnSetTitle interface for scroll item title callback
          * @return Builder with custom OnSetTitle callback
+         * Your activity must implement OnTitleSet interface
          */
         public Builder setTitleListener(OnSetTitle onSetTitle) {
             this.onSetTitle = onSetTitle;
@@ -232,8 +271,18 @@ public class HorizontalScroll implements OnSetTitle{
             bundle.putFloat("text_size", badgeTextSize == 0 ? 12 : badgeTextSize);
             bundle.putInt("text_color", badgeTextColor == 0 ? Color.RED : badgeTextColor);
             bundle.putInt("image_size", imageSize == 0 ? 250 : imageSize);
+            bundle.putInt("max_image_size", maxImageSize == 0 ? 250 : maxImageSize);
+            bundle.putInt("transform_code", transformType.getTransformCode() == 0 ? 3 : transformType.getTransformCode());
+            bundle.putInt("curve_size", angleRadius);
 
             addOffset(data);
+
+            if (itemsPerScreen == 0){
+                itemsPerScreen = 5;
+            }
+            if (scrollItemLayout == 0){
+                scrollItemLayout = R.layout.scroll_item_layout;
+            }
 
             ScrollAdapter adapter = new ScrollAdapter(context, data, bundle, scrollItemLayout, itemsPerScreen, clickListener);
 

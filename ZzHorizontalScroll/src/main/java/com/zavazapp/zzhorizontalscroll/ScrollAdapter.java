@@ -3,6 +3,7 @@ package com.zavazapp.zzhorizontalscroll;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,31 +61,58 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int x = Utils.getScreenDimen(context).x;
-        //image size
-        //default size is screen width / 6
-        int imageSize = bundle.getInt("image_size");
-        holder.itemView.getLayoutParams().width = x / itemsPerScreen;
-        holder.itemView.getLayoutParams().height = x / itemsPerScreen;
 
         //badge text
-        if (data.get(position).getBadge().equals("")){
-            holder.scrollBadge.setVisibility(View.INVISIBLE);
+        if (data.get(position).getBadge() == null){
+            holder.scrollBadge.setVisibility(View.GONE);
         }else {
-            holder.scrollBadge.setText(data.get(position).getBadge());
-            holder.scrollBadge.setVisibility(View.VISIBLE);
+            if (data.get(position).getBadge().equals("")) {
+                holder.scrollBadge.setVisibility(View.GONE);
+            } else {
+                holder.scrollBadge.setText(data.get(position).getBadge());
+                holder.scrollBadge.setVisibility(View.VISIBLE);
+            }
         }
 
+        //image view size
+        int maxImageSize = bundle.getInt("max_image_size");
+        //default items per screen = 5
+        int imageSize = bundle.getInt("image_size");
+        holder.itemView.getLayoutParams().width = x / itemsPerScreen;
+//        holder.itemView.getLayoutParams().height = x / itemsPerScreen;
+
+        //holder.itemView.getLayoutParams().width = Math.min(Math.min(imageSize, maxImageSize), x / itemsPerScreen);
+        holder.itemView.getLayoutParams().height = Math.min(Math.min(imageSize, maxImageSize), x / itemsPerScreen);
+
+
         //image size
-        int imageX = imageSize > 0 ? imageSize : x / 6;
-        int imageY = imageSize > 0 ? imageSize : x / 6;
+
+        imageSize = Math.min(imageSize, maxImageSize);
+        int imageX = imageSize > 0 ? imageSize : x / itemsPerScreen;
+        int imageY = imageSize > 0 ? imageSize : x / itemsPerScreen;
 
         if (data.get(position).getImageRes() == 0){
             if (!data.get(position).getImageUrl().isEmpty()){
-                Picasso.get().load(data.get(position).getImageUrl()).resize(imageX, imageY).into(holder.imageView);
+                setImageView(holder, position, imageX, imageY);
             }
         }else {
             Picasso.get().load(data.get(position).getImageRes()).resize(imageX, imageY).into(holder.imageView);
         }
+    }
+
+    private void setImageView(@NonNull ViewHolder holder, int position, int imageX, int imageY) {
+        int transformCode = bundle.getInt("transform_code");
+        int curveSize = bundle.getInt("curve_size");
+        Picasso.get()
+                .load(data.get(position).getImageUrl())
+                .transform(
+                        transformCode == 1 ?
+                                new CircleTransform() :
+                                    (transformCode == 2 ? new RadiusRectangleTransform(curveSize) :
+                                            new NoTransform()
+                                            ))
+                .resize(imageX, imageY)
+                .into(holder.imageView);
     }
 
 
@@ -112,7 +140,9 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            clickListener.onItemClick(getBindingAdapterPosition());
+            if (clickListener != null) {
+                clickListener.onItemClick(getBindingAdapterPosition());
+            }
         }
     }
 }

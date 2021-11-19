@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.zavazapp.zzhorizontalscroll.HorizontalScroll;
+import com.zavazapp.zzhorizontalscroll.IOnDataSet;
 import com.zavazapp.zzhorizontalscroll.ImageTransform;
 import com.zavazapp.zzhorizontalscroll.OnScrollItemClickListener;
 import com.zavazapp.zzhorizontalscroll.OnSetTitle;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnScrollItemClickListener, OnSetTitle{
 
-    List<ScrollItemModel> data = new ArrayList<>();
+    public List<ScrollItemModel> data = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,12 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
                 //optionals
 
-                .setDataOffset(1) //library default = 0
+                .setDataOffset(1, new IOnDataSet() {
+                    @Override
+                    public void onDataSet(List<ScrollItemModel> data) {
+                        refreshData(data);
+                    }
+                }) //library default = 0
 
                         /**
                          * @param scrollItemLayout
@@ -146,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
                 .build();
 
+    }
+
+    private void refreshData(List<ScrollItemModel> data) {
+        this.data = data;
     }
 
 

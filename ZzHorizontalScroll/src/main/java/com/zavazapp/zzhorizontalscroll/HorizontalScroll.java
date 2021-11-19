@@ -60,7 +60,13 @@ public class HorizontalScroll implements OnSetTitle{
         }
     }
 
+    public List<ScrollItemModel> getData() {
+        return data;
+    }
 
+    public void setData(List<ScrollItemModel> data) {
+        this.data = data;
+    }
 
     public static class Builder{
         private Context context;
@@ -81,6 +87,7 @@ public class HorizontalScroll implements OnSetTitle{
         private int scrollItemLayout;
         private ImageTransform transformType;
         private int angleRadius;
+        private IOnDataSet iOnDataSet;
 
         /**
          * Context, data and recyclerView required
@@ -244,8 +251,9 @@ public class HorizontalScroll implements OnSetTitle{
             return this;
         }
 
-        public Builder setDataOffset(int offset) {
+        public Builder setDataOffset(int offset, IOnDataSet onDataSet) {
             this.offset = offset;
+            this.iOnDataSet = onDataSet;
             return this;
         }
 
@@ -304,6 +312,8 @@ public class HorizontalScroll implements OnSetTitle{
             layoutManager.startSmoothScroll(smoothScroller);
 
             horizontalScroll.setSmoothScroller(smoothScroller);
+            horizontalScroll.setData(data);
+            iOnDataSet.onDataSet(data);
 
             return horizontalScroll;
         }
@@ -341,6 +351,7 @@ public class HorizontalScroll implements OnSetTitle{
                 throw new ScrollViewExceptions("Data can not be null.");
             }
         }
+
     }
 
 }

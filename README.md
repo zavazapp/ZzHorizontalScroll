@@ -31,7 +31,12 @@ HorizontalScroll
 
                 //optionals
 
-                .setDataOffset(1) //library default = 0
+                .setDataOffset(1, new IOnDataSet() {
+                    @Override
+                    public void onDataSet(List<ScrollItemModel> data) {
+                        refreshData(data);
+                    }
+                }) //library default = 0
 
                         /**
                          * @param scrollItemLayout

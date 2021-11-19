@@ -138,5 +138,16 @@ Use ScrollItemModel constructors to create your data:
         this.badge = badge;
     }
 
+Optionaly you can provide your layout for scroll item, but must have only two elements:
 
+
+		<ImageView
+			android:id="@+id/scrollItemView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+		<TextView
+			android:id="@+id/scrollBadge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
     

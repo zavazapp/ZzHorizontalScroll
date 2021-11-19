@@ -3,7 +3,6 @@ package com.zavazapp.zzhorizontalscroll;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -130,7 +129,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         public ViewHolder(@NonNull ViewGroup itemView,  OnScrollItemClickListener clickListener, Bundle bundle) {
             super(itemView);
             this.itemView = itemView;
-            imageView = itemView.findViewById(R.id.weeksImageScroll);
+            imageView = itemView.findViewById(R.id.scrollItemView);
             scrollBadge = itemView.findViewById(R.id.scrollBadge);
             scrollBadge.setTextSize(bundle.getFloat("text_size"));
             scrollBadge.setTextColor(bundle.getInt("text_color"));

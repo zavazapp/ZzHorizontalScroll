@@ -11,6 +11,12 @@ public class ScrollItemModel {
     private String link;
     private String badge;
 
+    /**
+     * @param imageRes - Image to be shown on specific scroll item
+     * @param dsc - Description. Usually used in OnSetTitle callback
+     * @param link - Link. Usually used in OnScrollItemClickListener callback
+     * @param badge - Small text to be shown as badge on specific scroll item
+     */
     public ScrollItemModel(int imageRes, String dsc, String link, String badge) {
         this.imageRes = imageRes;
         this.dsc = dsc;
@@ -18,6 +24,12 @@ public class ScrollItemModel {
         this.badge = badge;
     }
 
+    /**
+     * @param imageUrl - http link for image to be shown on specific scroll item
+     * @param dsc - Description. Usually used in OnSetTitle callback
+     * @param link - Link. Usually used in OnScrollItemClickListener callback
+     * @param badge - Small text to be shown as badge on specific scroll item
+     */
     public ScrollItemModel(String imageUrl, String dsc, String link, String badge) {
         this.imageUrl = imageUrl;
         this.dsc = dsc;

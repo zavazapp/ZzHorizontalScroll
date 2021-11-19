@@ -313,7 +313,10 @@ public class HorizontalScroll implements OnSetTitle{
 
             horizontalScroll.setSmoothScroller(smoothScroller);
             horizontalScroll.setData(data);
-            iOnDataSet.onDataSet(data);
+
+            if (iOnDataSet != null) {
+                iOnDataSet.onDataSet(data);
+            }
 
             return horizontalScroll;
         }

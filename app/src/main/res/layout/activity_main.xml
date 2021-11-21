@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weeks2"
+        android:translationZ="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@color/design_default_color_on_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/weeks"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
     <TextView
         android:id="@+id/dsc"
         android:layout_width="wrap_content"
@@ -13,6 +27,8 @@
         app:layout_constraintBottom_toTopOf="@+id/weeks"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weeks"
         android:translationZ="8dp"

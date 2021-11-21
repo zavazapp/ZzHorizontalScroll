@@ -1,5 +1,5 @@
 package com.zavazapp.zzhorizontalscroll;
 
 public interface OnScrollItemClickListener {
-    void onItemClick(int position);
+    void onItemClick(int position, int recyclerId);
 }

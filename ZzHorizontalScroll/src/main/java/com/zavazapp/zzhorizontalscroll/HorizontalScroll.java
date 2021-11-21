@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HorizontalScroll implements OnSetTitle{
+public class HorizontalScroll{
 
     private RecyclerView recyclerView;
     private SnapHelper s;
@@ -47,17 +47,6 @@ public class HorizontalScroll implements OnSetTitle{
 
     public void setSmoothScroller(RecyclerView.SmoothScroller smoothScroller) {
         this.smoothScroller = smoothScroller;
-    }
-
-    @Override
-    public void setScrollItemTitle(int state) {
-        TextView tw = itemView.findViewById(R.id.scrollBadge);
-        if (tw != null && s != null && layoutManager != null) {
-            View v = s.findSnapView(layoutManager);
-            if (v != null) {
-                tw.setText(data.get(layoutManager.getPosition(v)).getBadge());
-            }
-        }
     }
 
     public List<ScrollItemModel> getData() {
@@ -265,7 +254,7 @@ public class HorizontalScroll implements OnSetTitle{
             shrinkDistance = shrinkDistance == 0 ? 0.78f : shrinkDistance;
 
             if (layoutManager == null){
-                layoutManager = new HorizontalLayoutManager(context, shrinkAmount, shrinkDistance, onSetTitle);
+                layoutManager = new HorizontalLayoutManager(context, shrinkAmount, shrinkDistance, onSetTitle, recyclerView.getId());
             }
 
             layoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -282,6 +271,7 @@ public class HorizontalScroll implements OnSetTitle{
             bundle.putInt("max_image_size", maxImageSize == 0 ? 250 : maxImageSize);
             bundle.putInt("transform_code", transformType.getTransformCode() == 0 ? 3 : transformType.getTransformCode());
             bundle.putInt("curve_size", angleRadius);
+            bundle.putInt("recycler_id", recyclerView.getId());
 
             addOffset(data);
 

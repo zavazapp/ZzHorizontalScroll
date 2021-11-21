@@ -12,6 +12,7 @@ public class HorizontalLayoutManager extends LinearLayoutManager {
     private float mShrinkAmount;
     private float mShrinkDistance;
     public OnSetTitle onSetTitle;
+    private int resourceId;
 
 
     /**
@@ -20,11 +21,12 @@ public class HorizontalLayoutManager extends LinearLayoutManager {
      * @param mShrinkDistance
      * @param onSetTitle
      */
-    public HorizontalLayoutManager(Context context, float mShrinkAmount, float mShrinkDistance, OnSetTitle onSetTitle) {
+    public HorizontalLayoutManager(Context context, float mShrinkAmount, float mShrinkDistance, OnSetTitle onSetTitle, int resourceId) {
         super(context);
         this.mShrinkAmount = mShrinkAmount;
         this.mShrinkDistance = mShrinkDistance;
         this.onSetTitle = onSetTitle;
+        this.resourceId = resourceId;
     }
 
     public HorizontalLayoutManager(Context context, int orientation, boolean reverseLayout) {
@@ -65,7 +67,7 @@ public class HorizontalLayoutManager extends LinearLayoutManager {
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
         if (onSetTitle != null) {
-            onSetTitle.setScrollItemTitle(findFirstCompletelyVisibleItemPosition());
+            onSetTitle.setScrollItemTitle(findFirstCompletelyVisibleItemPosition(), resourceId);
         }
     }
 

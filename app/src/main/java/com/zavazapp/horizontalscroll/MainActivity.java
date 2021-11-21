@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
 
         data.add(new ScrollItemModel(R.drawable.kolica_120,
-                "",
+                "Title",
                 "link",
                 null));
         data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
                 //optionals
 
                 .setDataOffset(1, new IOnDataSet() {
+                    /**
+                     * @param data - If offset is > 0 data must be changed for offset items on start and end.
+                     *             So original data must be refreshed.
+                     */
                     @Override
                     public void onDataSet(List<ScrollItemModel> data) {
                         refreshData(data);
@@ -152,6 +156,96 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
                 .build();
 
+
+
+                new HorizontalScroll.Builder()
+                        //required
+                        .withContext(this)
+                        .setRecyclerView(findViewById(R.id.weeks2))
+                        .withData(data)
+
+                        //optionals
+
+                        .setDataOffset(1, new IOnDataSet() {
+                            /**
+                             * @param data - If offset is > 0 data must be changed for offset items on start and end.
+                             *             So original data must be refreshed.
+                             */
+                            @Override
+                            public void onDataSet(List<ScrollItemModel> data) {
+                                refreshData(data);
+                            }
+                        }) //library default = 0
+
+                        /**
+                         * @param scrollItemLayout
+                         * must be of ViewGroup type and include
+                         * <ImageView
+                         * ndroid:id="@+id/weeksImageScroll"/>
+                         * and
+                         * <TextView
+                         * android:id="@+id/scrollBadge"/>
+                         * @return Builder with custom item layout
+                         */
+//                .setScrollItemLayout(R.layout.scroll_item_layout) //library default = R.layout.scroll_item_layout
+
+                        /**
+                         * @param clickListener (Optional)
+                         * @return Builder with clickListener
+                         * Calling activity must implement OnScrollItemClickListener
+                         * and override void onItemClick(int position);
+                         */
+                        .setClickListener(this)
+
+                        /**
+                         * @param layoutManager (Optional)
+                         * HorizontalLayoutManager extends LinearLayoutManager
+                         * @return Builder with custom HorizontalLayoutManager
+                         */
+                        //.setLayoutManager(new YourLinearLayoutManager(this)) //library default = HorizontalLayoutManager.java
+
+                        /**
+                         * @param s (optional)
+                         * @return Builder with custom SnapHelper
+                         */
+                        //.setSnapHelper(new LinearSnapHelper() || new PagerSnapHelper())
+
+                        .setBadgeTextSize(24f) //library default = 12f
+
+                        .setBadgeTextColor(Color.RED) //library default = Color.RED
+
+                        /**
+                         * @param imageSize (optional) - pixels - Sets the image text size of square shape. Sets the image radius.
+                         * Size is auto reduced to screen width / items per screen
+                         * @return Builder with custom badge text size.
+                         */
+                        .setImageSize(450) //library default = 250 (in pixels)
+
+                        .setMaxImageSize(150) //library default = 250 (in pixels)
+
+                        //.setTransform(ImageTransform.CIRCULAR || ImageTransform.SQUARE_CIRCULAR || ImageTransform.SQUARE)
+                        .setTransform(ImageTransform.SQUARE_CIRCULAR)
+
+                        /**
+                         * @param angleRadius (optional)
+                         * @return Builder with image with corner radius of chosen
+                         * value if ImageTransform.SQUARE_CIRCULAR type is used
+                         */
+                        .setAngleRadius(1)
+
+                        .itemsPerScreen(5) //library default = 5
+
+                        /**
+                         * @param onSetTitle (optional) - OnSetTitle interface for scroll item title callback
+                         * @return Builder with custom OnSetTitle callback
+                         * Your activity must implement OnTitleSet interface
+                         */
+                        .setTitleListener(this)
+
+                        .build();
+
+
+
     }
 
     private void refreshData(List<ScrollItemModel> data) {
@@ -160,13 +254,14 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
 
     @Override
-    public void onItemClick(int position) {
-        Toast.makeText(this, "item " + position + " clicked", Toast.LENGTH_SHORT).show();
+    public void onItemClick(int position, int recyclerId) {
+
     }
 
     @Override
-    public void setScrollItemTitle(int state) {
+    public void setScrollItemTitle(int position, int recyclerId) {
         //Optional TextView as per your implementation
         //that may take dsc from ScrollItemModel
+
     }
 }

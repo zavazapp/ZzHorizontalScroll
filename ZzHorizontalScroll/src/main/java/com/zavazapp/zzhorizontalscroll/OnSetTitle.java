@@ -1,6 +1,6 @@
 package com.zavazapp.zzhorizontalscroll;
 
 public interface OnSetTitle {
-        void setScrollItemTitle(int state);
+        void setScrollItemTitle(int position, int recyclerId);
 
 }

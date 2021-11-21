@@ -126,9 +126,11 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         ImageView imageView;
         TextView scrollBadge;
         OnScrollItemClickListener clickListener;
+        Bundle bundle;
         public ViewHolder(@NonNull ViewGroup itemView,  OnScrollItemClickListener clickListener, Bundle bundle) {
             super(itemView);
             this.itemView = itemView;
+            this.bundle = bundle;
             imageView = itemView.findViewById(R.id.scrollItemView);
             scrollBadge = itemView.findViewById(R.id.scrollBadge);
             scrollBadge.setTextSize(bundle.getFloat("text_size"));
@@ -140,7 +142,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         @Override
         public void onClick(View v) {
             if (clickListener != null) {
-                clickListener.onItemClick(getBindingAdapterPosition());
+                clickListener.onItemClick(getBindingAdapterPosition(), bundle.getInt("recycler_id"));
             }
         }
     }

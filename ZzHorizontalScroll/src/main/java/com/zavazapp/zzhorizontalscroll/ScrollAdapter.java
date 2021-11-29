@@ -1,6 +1,7 @@
 package com.zavazapp.zzhorizontalscroll;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -62,9 +64,9 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int x = Utils.getScreenDimen(context).x;
 
         //badge text
-        if (data.get(position).getBadge() == null){
+        if (data.get(position).getBadge() == null) {
             holder.scrollBadge.setVisibility(View.GONE);
-        }else {
+        } else {
             if (data.get(position).getBadge().equals("")) {
                 holder.scrollBadge.setVisibility(View.GONE);
             } else {
@@ -90,26 +92,44 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int imageX = imageSize > 0 ? imageSize : x / itemsPerScreen;
         int imageY = imageSize > 0 ? imageSize : x / itemsPerScreen;
 
-        if (data.get(position).getImageRes() == 0){
-            if (!data.get(position).getImageUrl().isEmpty()){
-                setImageView(holder, position, imageX, imageY);
-            }
-        }else {
+        if (data.get(position).getImageRes() != 0) {
             Picasso.get().load(data.get(position).getImageRes()).resize(imageX, imageY).into(holder.imageView);
         }
+        if (data.get(position).getImageUrl() != null && !data.get(position).getImageUrl().isEmpty()) {
+            setImageView(data.get(position).getImageUrl(), holder, position, imageX, imageY);
+        }
+        if (data.get(position).getUri() != null) {
+            setImageView(data.get(position).getImageUrl(), holder, position, imageX, imageY);
+        }
+
     }
 
-    private void setImageView(@NonNull ViewHolder holder, int position, int imageX, int imageY) {
+    private void setImageView(String imageUrl, @NonNull ViewHolder holder, int position, int imageX, int imageY) {
         int transformCode = bundle.getInt("transform_code");
         int curveSize = bundle.getInt("curve_size");
         Picasso.get()
-                .load(data.get(position).getImageUrl())
+                .load(imageUrl)
                 .transform(
                         transformCode == 1 ?
                                 new CircleTransform() :
-                                    (transformCode == 2 ? new RadiusRectangleTransform(curveSize) :
-                                            new NoTransform()
-                                            ))
+                                (transformCode == 2 ? new RadiusRectangleTransform(curveSize) :
+                                        new NoTransform()
+                                ))
+                .resize(imageX, imageY)
+                .into(holder.imageView);
+    }
+
+    private void setImageView(Uri imageURI, @NonNull ViewHolder holder, int position, int imageX, int imageY) {
+        int transformCode = bundle.getInt("transform_code");
+        int curveSize = bundle.getInt("curve_size");
+        Picasso.get()
+                .load(imageURI)
+                .transform(
+                        transformCode == 1 ?
+                                new CircleTransform() :
+                                (transformCode == 2 ? new RadiusRectangleTransform(curveSize) :
+                                        new NoTransform()
+                                ))
                 .resize(imageX, imageY)
                 .into(holder.imageView);
     }
@@ -127,7 +147,8 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         TextView scrollBadge;
         OnScrollItemClickListener clickListener;
         Bundle bundle;
-        public ViewHolder(@NonNull ViewGroup itemView,  OnScrollItemClickListener clickListener, Bundle bundle) {
+
+        public ViewHolder(@NonNull ViewGroup itemView, OnScrollItemClickListener clickListener, Bundle bundle) {
             super(itemView);
             this.itemView = itemView;
             this.bundle = bundle;

@@ -142,6 +142,13 @@ Use ScrollItemModel constructors to create your data:
         this.link = link;
         this.badge = badge;
     }
+    
+    public ScrollItemModel(URI uri, String dsc, String link, String badge) {
+        this.uri = uri;
+        this.dsc = dsc;
+        this.link = link;
+        this.badge = badge;
+    }
 
 Optionaly you can provide your layout for scroll item, but must have only two elements:
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.net.URI;
 import java.util.List;
 
@@ -123,7 +124,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int transformCode = bundle.getInt("transform_code");
         int curveSize = bundle.getInt("curve_size");
         Picasso.get()
-                .load(imageURI)
+                .load(new File(imageURI.getPath()))
                 .transform(
                         transformCode == 1 ?
                                 new CircleTransform() :

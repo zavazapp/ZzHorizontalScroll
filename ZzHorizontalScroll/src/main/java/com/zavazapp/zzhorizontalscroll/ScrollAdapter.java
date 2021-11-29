@@ -99,7 +99,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
             setImageView(data.get(position).getImageUrl(), holder, position, imageX, imageY);
         }
         if (data.get(position).getUri() != null) {
-            setImageView(data.get(position).getImageUrl(), holder, position, imageX, imageY);
+            setImageView(data.get(position).getUri(), holder, position, imageX, imageY);
         }
 
     }

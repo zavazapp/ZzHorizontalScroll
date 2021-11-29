@@ -1,5 +1,7 @@
 package com.zavazapp.zzhorizontalscroll;
 
+import java.net.URI;
+
 /**
  * Default model for adapter
  */
@@ -7,6 +9,7 @@ public class ScrollItemModel {
 
     private int imageRes;
     private String imageUrl;
+    private URI uri;
     private String dsc;
     private String link;
     private String badge;
@@ -32,6 +35,13 @@ public class ScrollItemModel {
      */
     public ScrollItemModel(String imageUrl, String dsc, String link, String badge) {
         this.imageUrl = imageUrl;
+        this.dsc = dsc;
+        this.link = link;
+        this.badge = badge;
+    }
+
+    public ScrollItemModel(URI uri, String dsc, String link, String badge) {
+        this.uri = uri;
         this.dsc = dsc;
         this.link = link;
         this.badge = badge;

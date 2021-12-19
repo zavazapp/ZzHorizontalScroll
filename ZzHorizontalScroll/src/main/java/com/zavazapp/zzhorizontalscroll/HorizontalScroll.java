@@ -300,8 +300,9 @@ public class HorizontalScroll{
 
             if (s == null){
                 s = new LinearSnapHelper();
+                s.attachToRecyclerView(recyclerView);
             }
-            s.attachToRecyclerView(recyclerView);
+
             s.findSnapView(layoutManager);
             recyclerView.setAdapter(adapter);
 

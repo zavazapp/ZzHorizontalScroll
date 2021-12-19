@@ -101,7 +101,7 @@ HorizontalScroll
                          * Your activity must implement OnTitleSet interface
                          */
                 .setTitleListener(this)
-
+		.setPlaceholderImage(yourDrawable)
                 .build();
 
     }

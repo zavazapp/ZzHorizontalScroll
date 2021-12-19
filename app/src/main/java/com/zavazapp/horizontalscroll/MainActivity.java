@@ -1,12 +1,18 @@
 package com.zavazapp.horizontalscroll;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zavazapp.zzhorizontalscroll.HorizontalScroll;
@@ -22,63 +28,69 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnScrollItemClickListener, OnSetTitle{
 
     public List<ScrollItemModel> data = new ArrayList<>();
+    private final int BABY_SCROLL_DATA_OFFSET = 3;
+    public HorizontalScroll horizontalScroll;
+    private RecyclerView recyclerView;
+    private SnapHelper s = new LinearSnapHelper();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerView = findViewById(R.id.weeks);
 
-        data.add(new ScrollItemModel(R.drawable.kolica_120,
-                "Title",
+        data.add(new ScrollItemModel(0,
+                "Title1",
                 "link",
                 null));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "",
+        data.add(new ScrollItemModel(0,
+                "Title2",
                 "link",
                 ""));
-        data.add(new ScrollItemModel(R.drawable.kolica_120,
-                "",
-                "link",
-                ""));
-        data.add(new ScrollItemModel(R.drawable.kolica_120,
-                "",
-                "link",
-                ""));
-        data.add(new ScrollItemModel("https://www.bebac.com/uploads/porodiljsko-bolovanje-vizual(1).png",
-                "",
-                "link",
-                ""));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "",
-                "link",
-                "1"));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "",
-                "link",
-                "2"));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "",
-                "link",
-                "3"));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "",
-                "link",
-                "4"));
-        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
-                "asdfsaf",
-                "link",
-                "5"));
+//        data.add(new ScrollItemModel(R.drawable.kolica_120,
+//                "Title3",
+//                "link",
+//                ""));
+//        data.add(new ScrollItemModel(R.drawable.kolica_120,
+//                "Title4",
+//                "link",
+//                ""));
+//        data.add(new ScrollItemModel("https://www.bebac.com/uploads/porodiljsko-bolovanje-vizual(1).png",
+//                "Title5",
+//                "link",
+//                ""));
+//        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
+//                "Title6",
+//                "link",
+//                "1"));
+//        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
+//                "Title7",
+//                "link",
+//                "2"));
+//        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
+//                "Title8",
+//                "link",
+//                "3"));
+//        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
+//                "Title9",
+//                "link",
+//                "4"));
+//        data.add(new ScrollItemModel(android.R.drawable.ic_menu_camera,
+//                "Title10",
+//                "link",
+//                "5"));
 
-        HorizontalScroll horizontalScroll =
-                new HorizontalScroll.Builder()
+
+
+                horizontalScroll = new HorizontalScroll.Builder()
                 //required
                 .withContext(this)
-                .setRecyclerView(findViewById(R.id.weeks))
+                .setRecyclerView(recyclerView)
                 .withData(data)
 
                 //optionals
 
-                .setDataOffset(1, new IOnDataSet() {
+                .setDataOffset(BABY_SCROLL_DATA_OFFSET, new IOnDataSet() {
                     /**
                      * @param data - If offset is > 0 data must be changed for offset items on start and end.
                      *             So original data must be refreshed.
@@ -145,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
                          */
                 .setAngleRadius(1)
 
-                .itemsPerScreen(5) //library default = 5
+                .itemsPerScreen(7) //library default = 5
 
                         /**
                          * @param onSetTitle (optional) - OnSetTitle interface for scroll item title callback
@@ -153,8 +165,9 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
                          * Your activity must implement OnTitleSet interface
                          */
                 .setTitleListener(this)
-
+                .setPlaceholderImage(R.drawable.ic_baseline_do_not_disturb_24)
                 .build();
+
 
 
 
@@ -166,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
 
                         //optionals
 
-                        .setDataOffset(1, new IOnDataSet() {
+                        .setDataOffset(BABY_SCROLL_DATA_OFFSET, new IOnDataSet() {
                             /**
                              * @param data - If offset is > 0 data must be changed for offset items on start and end.
                              *             So original data must be refreshed.
@@ -233,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
                          */
                         .setAngleRadius(1)
 
-                        .itemsPerScreen(5) //library default = 5
+                        .itemsPerScreen(3) //library default = 5
 
                         /**
                          * @param onSetTitle (optional) - OnSetTitle interface for scroll item title callback
@@ -241,9 +254,9 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
                          * Your activity must implement OnTitleSet interface
                          */
                         .setTitleListener(this)
-
+                        .setSnapHelper(s)
+                        .setPlaceholderImage(R.drawable.ic_code)
                         .build();
-
 
 
     }
@@ -262,6 +275,10 @@ public class MainActivity extends AppCompatActivity implements OnScrollItemClick
     public void setScrollItemTitle(int position, int recyclerId) {
         //Optional TextView as per your implementation
         //that may take dsc from ScrollItemModel
-
+        TextView tw = findViewById(R.id.dsc);
+        View v = s.findSnapView(horizontalScroll.getLayoutManager());
+        if (v != null) {
+            tw.setText(data.get(recyclerView.getChildLayoutPosition(v) + BABY_SCROLL_DATA_OFFSET).getDsc());
+        }
     }
 }

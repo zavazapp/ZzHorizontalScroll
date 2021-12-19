@@ -3,8 +3,6 @@ package com.zavazapp.zzhorizontalscroll;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,6 +23,7 @@ public class HorizontalScroll{
     private LinearLayoutManager layoutManager;
     private ConstraintLayout itemView;
     private RecyclerView.SmoothScroller smoothScroller;
+    private ScrollAdapter adapter;
 
     private HorizontalScroll() {
     }
@@ -57,6 +56,14 @@ public class HorizontalScroll{
         this.data = data;
     }
 
+    public ScrollAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(ScrollAdapter adapter) {
+        this.adapter = adapter;
+    }
+
     public static class Builder{
         private Context context;
         private RecyclerView recyclerView;
@@ -77,6 +84,7 @@ public class HorizontalScroll{
         private ImageTransform transformType;
         private int angleRadius;
         private IOnDataSet iOnDataSet;
+        private int placeholderImage;
 
         /**
          * Context, data and recyclerView required
@@ -246,6 +254,11 @@ public class HorizontalScroll{
             return this;
         }
 
+        public Builder setPlaceholderImage(int placeholderImage) {
+            this.placeholderImage = placeholderImage;
+            return this;
+        }
+
         public HorizontalScroll build(){
             validate();
             HorizontalScroll horizontalScroll = new HorizontalScroll();
@@ -282,7 +295,8 @@ public class HorizontalScroll{
                 scrollItemLayout = R.layout.scroll_item_layout;
             }
 
-            ScrollAdapter adapter = new ScrollAdapter(context, data, bundle, scrollItemLayout, itemsPerScreen, clickListener);
+            ScrollAdapter adapter = new ScrollAdapter(context, data, bundle, scrollItemLayout, itemsPerScreen, placeholderImage, clickListener);
+            horizontalScroll.setAdapter(adapter);
 
             if (s == null){
                 s = new LinearSnapHelper();
@@ -342,6 +356,9 @@ public class HorizontalScroll{
             }
             if (data == null){
                 throw new ScrollViewExceptions("Data can not be null.");
+            }
+            if (placeholderImage == 0){
+                throw new ScrollViewExceptions("Placeholder image must be provided");
             }
         }
 

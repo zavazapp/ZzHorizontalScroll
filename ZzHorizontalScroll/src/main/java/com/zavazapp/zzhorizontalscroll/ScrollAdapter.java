@@ -30,6 +30,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
     private Bundle bundle;
     private int scrollItemLayout;
     private int itemsPerScreen;
+    private int placeholderImage;
 
     /**
      * @param context
@@ -37,20 +38,19 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
      * @param bundle
      * @param clickListener
      */
-    public ScrollAdapter(Context context, List<ScrollItemModel> data, Bundle bundle, int scrollItemLayout, int itemsPerScreen, OnScrollItemClickListener clickListener) {
+    public ScrollAdapter(Context context, List<ScrollItemModel> data, Bundle bundle, int scrollItemLayout, int itemsPerScreen, int placeholderImage, OnScrollItemClickListener clickListener) {
         this.context = context;
         this.data = data;
         this.bundle = bundle;
         this.scrollItemLayout = scrollItemLayout;
         this.clickListener = clickListener;
+        this.placeholderImage = placeholderImage;
         this.itemsPerScreen = itemsPerScreen;
-
     }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-
     }
 
     @NonNull
@@ -94,7 +94,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int imageY = imageSize > 0 ? imageSize : x / itemsPerScreen;
 
         if (data.get(position).getImageRes() != 0) {
-            Picasso.get().load(data.get(position).getImageRes()).resize(imageX, imageY).into(holder.imageView);
+            Picasso.get().load(data.get(position).getImageRes()).placeholder(placeholderImage).resize(imageX, imageY).into(holder.imageView);
         }
         if (data.get(position).getImageUrl() != null && !data.get(position).getImageUrl().isEmpty()) {
             setImageView(data.get(position).getImageUrl(), holder, position, imageX, imageY);
@@ -102,7 +102,6 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         if (data.get(position).getUri() != null) {
             setImageView(data.get(position).getUri(), holder, position, imageX, imageY);
         }
-
     }
 
     private void setImageView(String imageUrl, @NonNull ViewHolder holder, int position, int imageX, int imageY) {
@@ -110,6 +109,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int curveSize = bundle.getInt("curve_size");
         Picasso.get()
                 .load(imageUrl)
+                .placeholder(placeholderImage)
                 .transform(
                         transformCode == 1 ?
                                 new CircleTransform() :
@@ -125,6 +125,7 @@ public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder
         int curveSize = bundle.getInt("curve_size");
         Picasso.get()
                 .load(new File(imageURI.getPath()))
+                .placeholder(placeholderImage)
                 .transform(
                         transformCode == 1 ?
                                 new CircleTransform() :

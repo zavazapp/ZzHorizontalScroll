@@ -24,8 +24,11 @@
         android:id="@+id/dsc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/teal_200"
+        android:translationZ="50dp"
         app:layout_constraintBottom_toTopOf="@+id/weeks"
         app:layout_constraintEnd_toEndOf="parent"
+        android:text="dsadsadsafdsfsafsd"
         app:layout_constraintStart_toStartOf="parent" />
 
 
